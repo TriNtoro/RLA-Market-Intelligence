@@ -3,38 +3,162 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="RLA Market Intelligence - Laporan harian pasar saham Indonesia">
+<meta name="description" content="Kalender laporan harian RLA Market Intelligence.">
 <title>RLA Market Intelligence</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--line:#26364f;--muted:#9aabc3;--text:#edf3fb;--accent:#61d6a5}
-*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(150deg,#0b1220,#101b2d 60%,#0b1220);color:var(--text)}
-.wrap{width:min(920px,calc(100% - 32px));margin:auto;padding:42px 0 60px}
-header{padding:12px 0 28px;border-bottom:1px solid var(--line)}.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
-h1{margin:8px 0 4px;font-size:clamp(28px,5vw,42px);line-height:1.15;letter-spacing:-.03em}.sub,.desc,.date,footer,.archive small{color:var(--muted)}
-.section-title{margin:30px 0 14px;font-size:18px}.report{padding:24px;border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:0 14px 40px #0003}
-.tag{display:inline-block;padding:4px 10px;border-radius:999px;color:#082117;background:var(--accent);font-size:11px;font-weight:800;letter-spacing:.06em}
-.date{margin:14px 0 2px;font-size:14px}h2{margin:0 0 8px;font-size:24px}.desc{margin:0 0 20px}
-.primary{display:inline-block;padding:11px 17px;border-radius:10px;color:#071b15;background:var(--accent);text-decoration:none;font-weight:800}
-.archive{display:grid;gap:10px}.archive a{display:flex;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid var(--line);border-radius:12px;color:var(--text);background:#111c2d;text-decoration:none}
-.archive a:hover{border-color:var(--accent)}footer{margin-top:38px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}
-@media(max-width:560px){.wrap{padding-top:28px}.report{padding:19px}.archive a{display:block}.archive small{display:block;margin-top:3px}}
+:root{color-scheme:dark;--bg:#0a1220;--panel:#111d30;--panel2:#16243a;--line:#293b56;--text:#edf3fb;--muted:#91a3bd;--green:#48d6a0;--green-dark:#123d35;--blue:#8db8ff}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#1c3553 0%,#0a1220 58%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{width:min(980px,calc(100% - 30px));margin:0 auto;padding:38px 0 55px}
+header{padding:10px 0 25px;border-bottom:1px solid var(--line)}
+.kicker{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.12;letter-spacing:-.035em;margin:8px 0}
+.subtitle{margin:0;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;margin-top:25px;align-items:start}
+.calendar,.side{background:rgba(17,29,48,.94);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 45px #0003}
+.calendar{padding:22px}
+.monthbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.monthname{font-size:23px;font-weight:750;letter-spacing:-.02em}
+.controls{display:flex;gap:8px}
+button{width:39px;height:39px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);font-size:20px;cursor:pointer}
+button:hover{border-color:var(--green);color:var(--green)}
+.weekdays,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.weekdays{margin-bottom:8px}
+.weekdays div{text-align:center;color:var(--muted);font-size:12px;font-weight:700;padding:7px 0}
+.day{min-height:78px;border:1px solid #26364e;border-radius:11px;background:#0e192a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#d5deeb;text-decoration:none;position:relative}
+.day .num{font-size:17px;font-weight:650}
+.day .status{font-size:10px;color:#73849d}
+.day.empty{visibility:hidden}
+.day.has-report{background:linear-gradient(145deg,#17483d,#12362f);border:1px solid #36b98a;color:#eafff6;box-shadow:inset 0 0 0 1px #36b98a22}
+.day.has-report .status{color:#8ff0c7;font-weight:750}
+.day.has-report:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:18px;color:var(--muted);font-size:12px}
+.legend span{display:flex;align-items:center;gap:7px}
+.dot{width:10px;height:10px;border-radius:3px;background:#0e192a;border:1px solid #53647d}
+.dot.active{background:var(--green-dark);border-color:var(--green)}
+.side{padding:20px}
+.side h2{font-size:16px;margin:0 0 14px}
+.report-card{padding:14px;border-radius:12px;background:var(--green-dark);border:1px solid #2b9d78}
+.report-date{font-size:11px;color:#9deccc;font-weight:800;letter-spacing:.08em}
+.report-title{font-size:17px;font-weight:750;margin:5px 0}
+.report-link{display:inline-block;margin-top:8px;color:#b5ffdf;font-size:13px;font-weight:750;text-decoration:none}
+.report-link:hover{text-decoration:underline}
+.note{font-size:12px;color:var(--muted);margin:14px 0 0}
+footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.side{order:2}}
+@media(max-width:520px){.wrap{padding-top:25px}.calendar{padding:13px}.weekdays,.days{gap:4px}.day{min-height:58px;border-radius:8px}.day .num{font-size:15px}.day .status{font-size:8px}.monthname{font-size:19px}.monthbar{margin-bottom:13px}}
 </style>
 </head>
 <body>
 <main class="wrap">
-<header><div class="eyebrow">RLA Community · Daily Briefing</div><h1>RLA Market Intelligence</h1><p class="sub">Ringkasan dan arsip analisis pasar saham Indonesia.</p></header>
-<h2 class="section-title">Laporan terbaru</h2>
-<section class="report">
-<span class="tag">LAPORAN TERBARU</span>
-<p class="date">Senin, 9 November 2026</p>
-<h2>Laporan Pagi RLA</h2>
-<p class="desc">IHSG · Pasar Global · Foreign Flow · Sektor · Aktivitas Bandar · Stock Highlights</p>
-<a class="primary" href="laporan/2026-11-09.html">Baca laporan lengkap →</a>
-</section>
-<h2 class="section-title">Arsip laporan</h2>
-<nav class="archive" aria-label="Arsip laporan harian">
-<a href="laporan/2026-11-09.html"><span>9 November 2026</span><small>Baca laporan →</small></a>
-</nav>
+<header>
+  <div class="kicker">RLA Community · Daily Market Briefing</div>
+  <h1>RLA Market Intelligence</h1>
+  <p class="subtitle">Kalender laporan harian pasar saham Indonesia</p>
+</header>
+
+<div class="layout">
+  <section class="calendar" aria-label="Kalender laporan">
+    <div class="monthbar">
+      <div class="monthname" id="monthName">November 2026</div>
+      <div class="controls">
+        <button id="prev" aria-label="Bulan sebelumnya" title="Bulan sebelumnya">‹</button>
+        <button id="next" aria-label="Bulan berikutnya" title="Bulan berikutnya">›</button>
+      </div>
+    </div>
+    <div class="weekdays">
+      <div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div><div>Min</div>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="legend">
+      <span><i class="dot active"></i> Laporan tersedia — klik tanggal</span>
+      <span><i class="dot"></i> Belum ada laporan</span>
+    </div>
+  </section>
+
+  <aside class="side">
+    <h2>Laporan tersedia</h2>
+    <div id="reportInfo">
+      <div class="report-card">
+        <div class="report-date">SENIN · 9 NOVEMBER 2026</div>
+        <div class="report-title">Laporan Pagi RLA</div>
+        <div style="font-size:12px;color:#b7d9ce">IHSG · Global Market · Foreign Flow · Sektor · Stock Highlights</div>
+        <a class="report-link" href="laporan/2026-11-09.html">Buka laporan lengkap →</a>
+      </div>
+    </div>
+    <p class="note">Tanggal berwarna hijau menandakan laporan sudah dipublikasikan. Pilih tanggal tersebut untuk membuka laporan.</p>
+  </aside>
+</div>
+
 <footer>RLA Market Intelligence · Untuk edukasi dan informasi, bukan rekomendasi investasi.</footer>
 </main>
-</body></html>
+<script>
+const reports = {
+  "2026-11-09": {
+    title: "Laporan Pagi RLA",
+    href: "laporan/2026-11-09.html",
+    subtitle: "IHSG · Global Market · Foreign Flow · Sektor · Stock Highlights"
+  }
+};
+let shown = new Date(2026, 10, 1);
+const monthName = document.getElementById("monthName");
+const daysEl = document.getElementById("days");
+const reportInfo = document.getElementById("reportInfo");
+const monthFormatter = new Intl.DateTimeFormat("id-ID", {month:"long",year:"numeric"});
+const dateFormatter = new Intl.DateTimeFormat("id-ID", {weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+function renderCalendar(){
+  const year = shown.getFullYear(), month = shown.getMonth();
+  monthName.textContent = monthFormatter.format(shown);
+  daysEl.innerHTML = "";
+  const firstDay = new Date(year,month,1);
+  const offset = (firstDay.getDay()+6)%7;
+  const count = new Date(year,month+1,0).getDate();
+
+  for(let i=0;i<offset;i++){
+    const blank=document.createElement("div");
+    blank.className="day empty";
+    daysEl.appendChild(blank);
+  }
+  for(let d=1;d<=count;d++){
+    const date = new Date(year,month,d);
+    const key = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const report = reports[key];
+    const cell = document.createElement(report ? "a" : "div");
+    cell.className = "day" + (report ? " has-report" : "");
+    if(report) cell.href = report.href;
+    const num=document.createElement("span"); num.className="num"; num.textContent=d;
+    const status=document.createElement("span"); status.className="status"; status.textContent=report?"TERSEDIA":"";
+    cell.append(num,status);
+    if(report) cell.title="Buka "+report.title;
+    daysEl.appendChild(cell);
+  }
+  const used=offset+count, trailing=(7-used%7)%7;
+  for(let i=0;i<trailing;i++){
+    const blank=document.createElement("div"); blank.className="day empty"; daysEl.appendChild(blank);
+  }
+  const monthReports=Object.entries(reports).filter(([key])=>key.startsWith(`${year}-${String(month+1).padStart(2,"0")}-`));
+  reportInfo.innerHTML="";
+  if(monthReports.length){
+    monthReports.sort((a,b)=>a[0].localeCompare(b[0]));
+    for(const [key,report] of monthReports){
+      const [y,m,d]=key.split("-").map(Number);
+      const card=document.createElement("div"); card.className="report-card";
+      const dateLine=document.createElement("div"); dateLine.className="report-date";
+      dateLine.textContent=dateFormatter.format(new Date(y,m-1,d)).toLocaleUpperCase("id-ID");
+      const title=document.createElement("div"); title.className="report-title"; title.textContent=report.title;
+      const desc=document.createElement("div"); desc.style.cssText="font-size:12px;color:#b7d9ce"; desc.textContent=report.subtitle;
+      const link=document.createElement("a"); link.className="report-link"; link.href=report.href; link.textContent="Buka laporan lengkap →";
+      card.append(dateLine,title,desc,link); reportInfo.appendChild(card);
+    }
+  } else {
+    const empty=document.createElement("p"); empty.className="note"; empty.textContent="Belum ada laporan yang dipublikasikan pada bulan ini.";
+    reportInfo.appendChild(empty);
+  }
+}
+document.getElementById("prev").addEventListener("click",()=>{shown=new Date(shown.getFullYear(),shown.getMonth()-1,1);renderCalendar()});
+document.getElementById("next").addEventListener("click",()=>{shown=new Date(shown.getFullYear(),shown.getMonth()+1,1);renderCalendar()});
+renderCalendar();
+</script>
+</body>
+</html>
