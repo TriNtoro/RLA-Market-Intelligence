@@ -1,0 +1,56 @@
+
+name: Update RLA report calendar
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'laporan/*.html'
+      - '.github/workflows/update-reports.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-report-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate reports.json
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          reports = []
+          for file in sorted(Path("laporan").glob("*.html")):
+              match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})\.html", file.name)
+              if match:
+                  date = match.group(1)
+                  reports.append({
+                      "date": date,
+                      "title": "Laporan Pagi RLA",
+                      "href": f"laporan/{file.name}"
+                  })
+
+          Path("reports.json").write_text(
+              json.dumps(reports, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8"
+          )
+          PY
+
+      - name: Commit updated report index
+        run: |
+          if git diff --quiet -- reports.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports.json
+          git commit -m "Update daily report calendar"
+          git push
