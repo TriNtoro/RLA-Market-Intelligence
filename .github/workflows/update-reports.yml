@@ -1,4 +1,3 @@
-
 name: Update RLA report calendar
 
 on:
@@ -20,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate reports.json
+      - name: Generate reports.json from uploaded HTML files
         run: |
           python3 - <<'PY'
           import json
@@ -29,7 +28,7 @@ jobs:
 
           reports = []
           for file in sorted(Path("laporan").glob("*.html")):
-              match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})\.html", file.name)
+              match = re.fullmatch(r"(\\d{4}-\\d{2}-\\d{2})\\.html", file.name)
               if match:
                   date = match.group(1)
                   reports.append({
@@ -39,18 +38,20 @@ jobs:
                   })
 
           Path("reports.json").write_text(
-              json.dumps(reports, ensure_ascii=False, indent=2) + "\n",
+              json.dumps(reports, ensure_ascii=False, indent=2) + "\\n",
               encoding="utf-8"
           )
+          print(f"Generated {len(reports)} report entries")
           PY
 
       - name: Commit updated report index
         run: |
-          if git diff --quiet -- reports.json; then
+          git add reports.json
+          if git diff --cached --quiet -- reports.json; then
+            echo "reports.json is already up to date"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports.json
           git commit -m "Update daily report calendar"
           git push
