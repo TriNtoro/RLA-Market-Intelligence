@@ -28,7 +28,7 @@ jobs:
 
           reports = []
           for file in sorted(Path("laporan").glob("*.html")):
-              match = re.fullmatch(r"(\\d{4}-\\d{2}-\\d{2})\\.html", file.name)
+              match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})\.html", file.name)
               if match:
                   date = match.group(1)
                   reports.append({
@@ -38,7 +38,7 @@ jobs:
                   })
 
           Path("reports.json").write_text(
-              json.dumps(reports, ensure_ascii=False, indent=2) + "\\n",
+              json.dumps(reports, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8"
           )
           print(f"Generated {len(reports)} report entries")
